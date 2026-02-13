@@ -136,8 +136,14 @@ async def upload_pdf(file: UploadFile = File(...)):
         
         # Add documents to vector store
         print("[INFO] Adding documents to vector store...")
-        vector_store.add_documents(documents=documents, ids=uuids)
-        print("[SUCCESS] Ingestion complete")
+        try:
+            vector_store.add_documents(documents=documents, ids=uuids)
+            print("[SUCCESS] Ingestion complete")
+        except Exception as e:
+            import traceback
+            traceback.print_exc()
+            print(f"[ERROR] Detailed vector store error: {e}")
+            raise HTTPException(status_code=500, detail=f"Vector store error: {e}")
         
         # Note: No need to reinitialize RAG system - the retriever will automatically
         # query the updated vector store on the next request
