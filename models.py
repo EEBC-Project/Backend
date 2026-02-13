@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 from langchain_groq import ChatGroq
-from langchain_community.embeddings import HuggingFaceInferenceAPIEmbeddings
+from langchain_huggingface import HuggingFaceEndpointEmbeddings
 
 # Load environment variables
 load_dotenv()
@@ -35,9 +35,11 @@ class Models:
             raise Exception("HF_TOKEN missing in environment variables")
 
         try:
-            self.embeddings_hf = HuggingFaceInferenceAPIEmbeddings(
-                api_key=hf_token,
-                model_name="sentence-transformers/all-MiniLM-L6-v2"
+            # Use HuggingFaceEndpointEmbeddings which replaces the old Inference API class
+            self.embeddings_hf = HuggingFaceEndpointEmbeddings(
+                model="sentence-transformers/all-MiniLM-L6-v2",
+                task="feature-extraction",
+                huggingfacehub_api_token=hf_token
             )
             print("[SUCCESS] HuggingFace Inference API embeddings initialized successfully")
         except Exception as e:
