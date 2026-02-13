@@ -38,12 +38,13 @@ if len(origins) == 1 and origins[0] == "*":
     print(f"[CORS] Allowing requests from all origins")
 else:
     # Restricted origins mode
+    # For specific origins, it's safer to allow all headers unless strictly required otherwise
     app.add_middleware(
         CORSMiddleware,
         allow_origins=origins,
         allow_credentials=True,
-        allow_methods=["GET", "POST", "OPTIONS"],
-        allow_headers=["Content-Type", "Authorization"],
+        allow_methods=["*"],
+        allow_headers=["*"],
     )
     print(f"[CORS] Allowing requests from: {', '.join(origins)}")
 
