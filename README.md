@@ -333,7 +333,7 @@ CORS_ORIGINS=https://your-frontend.com,https://another-app.com
 
 The system is configured to use:
 
-- **Embeddings**: sentence-transformers/all-MiniLM-L6-v2 (local HuggingFace model, no API key needed)
+- **Embeddings**: sentence-transformers/all-MiniLM-L6-v2 (via HuggingFace Inference API, requires free HF_TOKEN)
 - **Language Model**: Groq Llama 3 70B (fast, high-quality inference)
 
 ## Technical Details
@@ -344,14 +344,12 @@ Current essential dependencies:
 
 - `python-dotenv`: Environment variable management
 - `langchain`: RAG framework
-- `langchain-community`: Document loaders
+- `langchain-community`: Document loaders & Embeddings
 - `langchain-chroma`: Vector database integration
 - `langchain-groq`: Groq API integration
-- `langchain-huggingface`: HuggingFace embeddings integration
 - `pypdf`: PDF processing
 - `fastapi`: REST API framework
 - `uvicorn`: ASGI server
-- `sentence-transformers`: Local embeddings model
 - `python-multipart`: File upload support
 
 ### Memory Optimization

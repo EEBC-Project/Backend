@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 from langchain_groq import ChatGroq
-from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_community.embeddings import HuggingFaceInferenceAPIEmbeddings
 
 # Load environment variables
 load_dotenv()
@@ -28,12 +28,18 @@ class Models:
             print("[ERROR] No GROQ_API_KEY found in environment variables")
             raise Exception("No GROQ_API_KEY found in environment variables")
         
-        # Initialize HuggingFace embeddings (free, no API key needed)
+        # Initialize HuggingFace embeddings via API (lightweight, no local model)
+        hf_token = os.getenv("HF_TOKEN")
+        if not hf_token:
+            print("[ERROR] HF_TOKEN missing. Required for lightweight embeddings.")
+            raise Exception("HF_TOKEN missing in environment variables")
+
         try:
-            self.embeddings_hf = HuggingFaceEmbeddings(
+            self.embeddings_hf = HuggingFaceInferenceAPIEmbeddings(
+                api_key=hf_token,
                 model_name="sentence-transformers/all-MiniLM-L6-v2"
             )
-            print("[SUCCESS] HuggingFace embeddings initialized successfully")
+            print("[SUCCESS] HuggingFace Inference API embeddings initialized successfully")
         except Exception as e:
-            print(f"[ERROR] HuggingFace embeddings initialization failed: {e}")
-            raise Exception(f"HuggingFace embeddings initialization failed: {e}")
+            print(f"[ERROR] HuggingFace API initialization failed: {e}")
+            raise Exception(f"HuggingFace API initialization failed: {e}")
